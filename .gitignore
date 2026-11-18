@@ -4,4 +4,6 @@ dist
 
 *.apk
 *.aab
+*.keystore
+.keystore.properties
 

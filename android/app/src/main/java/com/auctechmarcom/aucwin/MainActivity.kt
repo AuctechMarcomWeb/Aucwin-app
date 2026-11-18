@@ -1,4 +1,4 @@
-package com.tousif.harbourcrm
+package com.auctechmarcom.aucwin
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

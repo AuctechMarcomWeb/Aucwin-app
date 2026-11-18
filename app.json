@@ -2,7 +2,7 @@
   "expo": {
     "name": "AucWin",
     "slug": "harbour-crm",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "nexuscrm",
@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tousif.harbourcrm",
+      "bundleIdentifier": "com.auctechmarcom.aucwin",
       "infoPlist": {
         "NSCameraUsageDescription": "Used to photograph client documents.",
         "NSPhotoLibraryUsageDescription": "Used to attach documents and photos to leads and clients.",
@@ -18,7 +18,8 @@
       }
     },
     "android": {
-      "package": "com.tousif.harbourcrm",
+      "package": "com.auctechmarcom.aucwin",
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0F2F58"
