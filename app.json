@@ -2,7 +2,7 @@
   "expo": {
     "name": "AucWin",
     "slug": "harbour-crm",
-    "version": "1.0.1",
+    "version": "1.0.6",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "nexuscrm",
@@ -19,7 +19,7 @@
     },
     "android": {
       "package": "com.auctechmarcom.aucwin",
-      "versionCode": 2,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0F2F58"
@@ -66,7 +66,8 @@
           }
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      "./plugins/withHardwareFeatures"
     ],
     "backgroundColor": "#F1F4F8"
   }
