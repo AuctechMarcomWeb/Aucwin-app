@@ -1,6 +1,17 @@
+// Lead pipeline, in order — from a brand-new lead through to a closed sale,
+// with the negative/closed outcomes grouped at the end.
 export const LEAD_STATUSES = [
-  "prospect", "follow_up", "meeting_scheduled", "meeting_done", "sale_done",
-  "dnp", "unreachable", "qualified", "new_lead", "junk", "rspv",
+  "new_lead",
+  "prospect",
+  "qualified",
+  "follow_up",
+  "meeting_scheduled",
+  "meeting_done",
+  "rspv",
+  "sale_done",
+  "unreachable",
+  "dnp",
+  "junk",
 ];
 export const LEAD_SOURCES = [
   "website",
@@ -31,7 +42,11 @@ export const SERVICE_STATUSES = [
 export const PAYMENT_STATUSES = ["pending", "paid", "overdue", "refunded"];
 
 export const label = (s) =>
-  String(s ?? "").replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()).replace(/^Dnp$/, "DNP").replace(/^Rspv$/, "RSPV");
+  String(s ?? "")
+    .replace(/_/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase())
+    .replace(/^Dnp$/, "DNP")
+    .replace(/^Rspv$/, "RSPV");
 
 // ---------------- 0004 modules ----------------
 export const NOTE_COLORS = [

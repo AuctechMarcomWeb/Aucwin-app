@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Alert, Platform, Pressable, Text, View, Linking } from "react-native";
+import { telUri, smsUri, waUri } from "@/lib/phone";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Ionicons } from "@expo/vector-icons";
@@ -34,7 +35,13 @@ import {
   s,
 } from "./ui";
 
-export function DateTimeField({ label: lbl, value, onChange, optional, defaultDate }) {
+export function DateTimeField({
+  label: lbl,
+  value,
+  onChange,
+  optional,
+  defaultDate,
+}) {
   const [mode, setMode] = useState(null);
   const d = value ?? defaultDate ?? new Date(Date.now() + 3600_000);
   return (
@@ -44,7 +51,10 @@ export function DateTimeField({ label: lbl, value, onChange, optional, defaultDa
           style={[s.input, { flex: 1 }]}
           onPress={() => setMode("date")}
         >
-          <Text numberOfLines={1} style={{ color: value ? C.text : C.faint, fontSize: 15 }}>
+          <Text
+            numberOfLines={1}
+            style={{ color: value ? C.text : C.faint, fontSize: 15 }}
+          >
             {value ? fmtDateTime(value.toISOString()) : "Tap to set"}
           </Text>
         </Pressable>
@@ -477,7 +487,7 @@ export function ContactActions({ phone, email, address }) {
           icon="call"
           text="Call"
           color={C.brand}
-          onPress={() => open(`tel:${phone}`)}
+          onPress={() => open(telUri(phone))}
         />
       )}
       {phone && (
@@ -485,7 +495,7 @@ export function ContactActions({ phone, email, address }) {
           icon="chatbubble-ellipses"
           text="SMS"
           color={C.brand}
-          onPress={() => open(`sms:${phone}`)}
+          onPress={() => open(smsUri(phone))}
         />
       )}
       {digits && (
@@ -493,7 +503,7 @@ export function ContactActions({ phone, email, address }) {
           icon="logo-whatsapp"
           text="WhatsApp"
           color="#16a34a"
-          onPress={() => open(`https://wa.me/${digits}`)}
+          onPress={() => open(waUri(phone))}
         />
       )}
       {email && (

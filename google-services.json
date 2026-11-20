@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "202284351477",
+    "project_id": "aucwin",
+    "storage_bucket": "aucwin.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202284351477:android:7769a0acba90c81dc0eabc",
+        "android_client_info": {
+          "package_name": "com.auctechmarcom.aucwin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5YBwQocsrFvX_GptVIVa7Z_idGjgox8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:202284351477:android:088ab23f32eba470c0eabc",
+        "android_client_info": {
+          "package_name": "com.tousif.harbourcrm"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5YBwQocsrFvX_GptVIVa7Z_idGjgox8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

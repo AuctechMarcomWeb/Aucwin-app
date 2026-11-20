@@ -2,7 +2,10 @@ import { useEffect, useRef } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  SafeAreaProvider,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -22,7 +25,11 @@ import TasksScreen from "@/screens/TasksScreen";
 import MoreScreen from "@/screens/MoreScreen";
 import HomeScreen from "@/screens/HomeScreen";
 import CalendarScreen from "@/screens/CalendarScreen";
-import { ChannelsScreen, ThreadScreen, ThreadTitle } from "@/screens/ChatScreen";
+import {
+  ChannelsScreen,
+  ThreadScreen,
+  ThreadTitle,
+} from "@/screens/ChatScreen";
 import {
   RemindersScreen,
   MeetingsScreen,
@@ -76,7 +83,11 @@ function MoreNav() {
         component={ClientDetailScreen}
         options={{ title: "Customer", headerShown: false }}
       />
-      <MoreStack.Screen name="Tasks" component={TasksScreen} options={{ title: "Tasks" }} />
+      <MoreStack.Screen
+        name="Tasks"
+        component={TasksScreen}
+        options={{ title: "Tasks" }}
+      />
       <MoreStack.Screen name="Reminders" component={RemindersScreen} />
       <MoreStack.Screen name="Meetings" component={MeetingsScreen} />
       <MoreStack.Screen
@@ -106,7 +117,12 @@ function ChatNav() {
         component={ThreadScreen}
         options={({ route }) => ({
           title: route.params?.title ?? "Chat",
-          headerTitle: () => <ThreadTitle title={route.params?.title ?? "Chat"} type={route.params?.type} />,
+          headerTitle: () => (
+            <ThreadTitle
+              title={route.params?.title ?? "Chat"}
+              type={route.params?.type}
+            />
+          ),
         })}
       />
     </ChatStack.Navigator>
@@ -120,7 +136,10 @@ const ICONS = {
   Calendar: ["calendar", "calendar-outline"],
   More: ["grid", "grid-outline"],
 };
-const NAV_THEME = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: C.bg } };
+const NAV_THEME = {
+  ...DefaultTheme,
+  colors: { ...DefaultTheme.colors, background: C.bg },
+};
 // dark bottom bar: light icons, coloured pill behind the active tab
 const TAB_BG = {
   Home: "rgba(255,255,255,0.14)",
@@ -137,12 +156,21 @@ const TAB_COLOR = {
   More: "#FFFFFF",
 };
 
-const TAB_LABEL = { Home: "Home", Leads: "Leads", Chat: "Chat", Calendar: "Calendar", More: "More" };
+const TAB_LABEL = {
+  Home: "Home",
+  Leads: "Leads",
+  Chat: "Chat",
+  Calendar: "Calendar",
+  More: "More",
+};
 
 function Tabs() {
   // keep the tab bar above Android's on-screen buttons / the iPhone home bar
   const insets = useSafeAreaInsets();
-  const counts = useQuery({ queryKey: ["module_counts"], queryFn: getModuleCounts });
+  const counts = useQuery({
+    queryKey: ["module_counts"],
+    queryFn: getModuleCounts,
+  });
   const unread = counts.data?.chat ?? 0;
   return (
     <Tab.Navigator
@@ -165,7 +193,16 @@ function Tabs() {
         },
         tabBarItemStyle: { paddingTop: 2 },
         tabBarLabel: ({ focused, color }) => (
-          <Text style={{ fontSize: 11, fontWeight: focused ? "800" : "600", color, marginTop: 2 }}>{TAB_LABEL[route.name]}</Text>
+          <Text
+            style={{
+              fontSize: 11,
+              fontWeight: focused ? "800" : "600",
+              color,
+              marginTop: 2,
+            }}
+          >
+            {TAB_LABEL[route.name]}
+          </Text>
         ),
         tabBarIcon: ({ focused, color }) => (
           <View
@@ -175,14 +212,32 @@ function Tabs() {
               borderRadius: 15,
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: focused ? (TAB_BG[route.name] ?? C.brandLight) : "transparent",
+              backgroundColor: focused
+                ? (TAB_BG[route.name] ?? C.brandLight)
+                : "transparent",
             }}
           >
-            <Ionicons name={ICONS[route.name][focused ? 0 : 1]} size={21} color={color} />
+            <Ionicons
+              name={ICONS[route.name][focused ? 0 : 1]}
+              size={21}
+              color={color}
+            />
           </View>
         ),
-        tabBarBadge: route.name === "Chat" && unread > 0 ? (unread > 99 ? "99+" : unread) : undefined,
-        tabBarBadgeStyle: { backgroundColor: "#F43F5E", color: "#fff", fontSize: 10, fontWeight: "800", borderWidth: 2, borderColor: C.dark },
+        tabBarBadge:
+          route.name === "Chat" && unread > 0
+            ? unread > 99
+              ? "99+"
+              : unread
+            : undefined,
+        tabBarBadgeStyle: {
+          backgroundColor: "#F43F5E",
+          color: "#fff",
+          fontSize: 10,
+          fontWeight: "800",
+          borderWidth: 2,
+          borderColor: C.dark,
+        },
       })}
     >
       <Tab.Screen
@@ -193,21 +248,25 @@ function Tabs() {
       <Tab.Screen
         name="Leads"
         component={LeadsNav}
-        options={{ headerShown: false }}
+        // Leaving Leads resets it to the list, so returning shows all leads, not the last-opened one.
+        options={{ headerShown: false, popToTopOnBlur: true }}
       />
       <Tab.Screen
         name="Chat"
         component={ChatNav}
+        // Leaving the tab pops the chat stack back to the list, so returning shows the main chat screen, not the last conversation.
+        options={{ headerShown: false, popToTopOnBlur: true }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={CalendarScreen}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Calendar" component={CalendarScreen} options={{ headerShown: false }} />
       <Tab.Screen
         name="More"
         component={MoreNav}
-        options={{ headerShown: false }}
-        listeners={({ navigation }) => ({
-          tabPress: () => navigation.navigate("More", { screen: "MoreHome" }),
-        })}
+        // Same: leaving More resets it to the main menu instead of the last-opened sub-screen.
+        options={{ headerShown: false, popToTopOnBlur: true }}
       />
     </Tab.Navigator>
   );

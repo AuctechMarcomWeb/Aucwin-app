@@ -76,7 +76,21 @@ const ACT = {
 };
 /** White box that groups list rows (instead of one card per row). */
 function ListBox({ children }) {
-  return <View style={{ backgroundColor: "#fff", borderRadius: 18, borderWidth: 1, borderColor: C.border, paddingHorizontal: 14, marginBottom: 10, ...shadow }}>{children}</View>;
+  return (
+    <View
+      style={{
+        backgroundColor: "#fff",
+        borderRadius: 18,
+        borderWidth: 1,
+        borderColor: C.border,
+        paddingHorizontal: 14,
+        marginBottom: 10,
+        ...shadow,
+      }}
+    >
+      {children}
+    </View>
+  );
 }
 const idOf = (p) => p.client_id ?? p.lead_id;
 
@@ -94,9 +108,15 @@ function cleanTitle(a) {
   const name = m[1];
   const base = name.replace(/\.[^.]+$/, "");
   const ext = (name.split(".").pop() || "").toLowerCase();
-  const random = /^[0-9a-f-]{16,}$/i.test(base) || /^(ImagePicker|rn_image_picker|image_\d{10,}|photo_\d{10,}|file_\d{10,})/i.test(base) || /^[A-Za-z0-9_-]{28,}$/.test(base);
+  const random =
+    /^[0-9a-f-]{16,}$/i.test(base) ||
+    /^(ImagePicker|rn_image_picker|image_\d{10,}|photo_\d{10,}|file_\d{10,})/i.test(
+      base,
+    ) ||
+    /^[A-Za-z0-9_-]{28,}$/.test(base);
   if (!random) return a.title;
-  if (["jpg", "jpeg", "png", "gif", "webp", "heic"].includes(ext)) return "Uploaded a photo";
+  if (["jpg", "jpeg", "png", "gif", "webp", "heic"].includes(ext))
+    return "Uploaded a photo";
   if (["mp4", "mov", "3gp", "mkv"].includes(ext)) return "Uploaded a video";
   return "Uploaded a file";
 }
@@ -141,7 +161,11 @@ export function ActivityPanel(parent) {
         <Loading />
       ) : !q.data?.length ? (
         <Card>
-          <Empty title="No history yet" hint="Log your first call or note." icon="time-outline" />
+          <Empty
+            title="No history yet"
+            hint="Log your first call or note."
+            icon="time-outline"
+          />
         </Card>
       ) : (
         <ListBox>
@@ -149,26 +173,78 @@ export function ActivityPanel(parent) {
             const [icon, fg, bg] = ACT[a.type] ?? ACT.system;
             const last = i === arr.length - 1;
             return (
-              <View key={a.id} style={{ flexDirection: "row", gap: 12, paddingTop: 12 }}>
+              <View
+                key={a.id}
+                style={{ flexDirection: "row", gap: 12, paddingTop: 12 }}
+              >
                 <View style={{ alignItems: "center" }}>
-                  <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: bg, alignItems: "center", justifyContent: "center" }}>
+                  <View
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      backgroundColor: bg,
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Ionicons name={icon} size={15} color={fg} />
                   </View>
-                  {!last && <View style={{ flex: 1, width: 2, backgroundColor: "#EEF2F6", marginTop: 4 }} />}
+                  {!last && (
+                    <View
+                      style={{
+                        flex: 1,
+                        width: 2,
+                        backgroundColor: "#EEF2F6",
+                        marginTop: 4,
+                      }}
+                    />
+                  )}
                 </View>
                 <View style={{ flex: 1, paddingBottom: 12 }}>
-                  <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}>
-                    <Text style={{ flex: 1, fontWeight: "700", color: C.text, fontSize: 14 }} >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "flex-start",
+                      gap: 8,
+                    }}
+                  >
+                    <Text
+                      style={{
+                        flex: 1,
+                        fontWeight: "700",
+                        color: C.text,
+                        fontSize: 14,
+                      }}
+                    >
                       {cleanTitle(a)}
                     </Text>
-                    <Text style={{ fontSize: 11, color: C.faint, marginTop: 2 }}>{fmtRelative(a.created_at)}</Text>
+                    <Text
+                      style={{ fontSize: 11, color: C.faint, marginTop: 2 }}
+                    >
+                      {fmtRelative(a.created_at)}
+                    </Text>
                   </View>
                   {a.body ? (
-                    <Text style={{ color: "#334155", marginTop: 6, fontSize: 13.5, lineHeight: 19, backgroundColor: "#F8FAFC", borderRadius: 10, padding: 9 }}>
+                    <Text
+                      style={{
+                        color: "#334155",
+                        marginTop: 6,
+                        fontSize: 13.5,
+                        lineHeight: 19,
+                        backgroundColor: "#F8FAFC",
+                        borderRadius: 10,
+                        padding: 9,
+                      }}
+                    >
                       {a.body}
                     </Text>
                   ) : null}
-                  <Text style={{ fontSize: 11.5, color: C.faint, marginTop: 4 }}>by {a.user?.full_name ?? "System"}</Text>
+                  <Text
+                    style={{ fontSize: 11.5, color: C.faint, marginTop: 4 }}
+                  >
+                    by {a.user?.full_name ?? "System"}
+                  </Text>
                 </View>
               </View>
             );
@@ -185,10 +261,18 @@ export function ActivityPanel(parent) {
                 <Pressable
                   key={t}
                   onPress={() => setType(t)}
-                  style={[s.chip, { flexDirection: "row", alignItems: "center", gap: 6 }, on && { backgroundColor: bg, borderColor: fg }]}
+                  style={[
+                    s.chip,
+                    { flexDirection: "row", alignItems: "center", gap: 6 },
+                    on && { backgroundColor: bg, borderColor: fg },
+                  ]}
                 >
                   <Ionicons name={icon} size={14} color={on ? fg : C.faint} />
-                  <Text style={[s.chipText, on && { color: fg, fontWeight: "800" }]}>{t[0].toUpperCase() + t.slice(1)}</Text>
+                  <Text
+                    style={[s.chipText, on && { color: fg, fontWeight: "800" }]}
+                  >
+                    {t[0].toUpperCase() + t.slice(1)}
+                  </Text>
                 </Pressable>
               );
             })}
@@ -252,7 +336,11 @@ export function FollowUpsPanel(parent) {
         <Loading />
       ) : !q.data?.length ? (
         <Card>
-          <Empty title="No follow-ups yet" hint="Plan the next call or meeting so it isn't forgotten." icon="calendar-outline" />
+          <Empty
+            title="No follow-ups yet"
+            hint="Plan the next call or meeting so it isn't forgotten."
+            icon="calendar-outline"
+          />
         </Card>
       ) : (
         q.data.map((f) => {
@@ -270,56 +358,111 @@ export function FollowUpsPanel(parent) {
                 borderLeftColor: late ? "#EA580C" : ffg,
               }}
             >
-              <View style={{ width: 40, height: 40, borderRadius: 13, backgroundColor: fbg, alignItems: "center", justifyContent: "center" }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 13,
+                  backgroundColor: fbg,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Ionicons name={ficon} size={18} color={ffg} />
               </View>
               <View style={{ flex: 1 }}>
-              <View style={[s.row, { justifyContent: "space-between" }]}>
-                <Badge value={f.type} />
-                <View style={{ flexDirection: "row" }}>
-                  {f.status === "pending" && (
+                <View style={[s.row, { justifyContent: "space-between" }]}>
+                  <Badge value={f.type} />
+                  <View style={{ flexDirection: "row" }}>
+                    {f.status === "pending" && (
+                      <IconButton
+                        icon="checkmark-circle"
+                        color={C.success}
+                        onPress={() => setComplete(f)}
+                      />
+                    )}
                     <IconButton
-                      icon="checkmark-circle"
-                      color={C.success}
-                      onPress={() => setComplete(f)}
+                      icon="create-outline"
+                      onPress={() => setModal(f)}
                     />
-                  )}
-                  <IconButton
-                    icon="create-outline"
-                    onPress={() => setModal(f)}
-                  />
-                  <IconButton
-                    icon="trash-outline"
-                    color={C.danger}
-                    onPress={() =>
-                      Alert.alert("Delete follow-up?", f.title, [
-                        { text: "Cancel" },
-                        {
-                          text: "Delete",
-                          style: "destructive",
-                          onPress: () => del.mutate(f.id),
-                        },
-                      ])
+                    <IconButton
+                      icon="trash-outline"
+                      color={C.danger}
+                      onPress={() =>
+                        Alert.alert("Delete follow-up?", f.title, [
+                          { text: "Cancel" },
+                          {
+                            text: "Delete",
+                            style: "destructive",
+                            onPress: () => del.mutate(f.id),
+                          },
+                        ])
+                      }
+                    />
+                  </View>
+                </View>
+                <Text
+                  style={{
+                    fontWeight: "700",
+                    color: C.text,
+                    fontSize: 14.5,
+                    textDecorationLine:
+                      f.status === "pending" ? "none" : "line-through",
+                  }}
+                >
+                  {f.title}
+                </Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 5,
+                    marginTop: 4,
+                  }}
+                >
+                  <Ionicons
+                    name={
+                      late
+                        ? "alert-circle"
+                        : f.status === "pending"
+                          ? "time-outline"
+                          : "checkmark-circle"
+                    }
+                    size={13}
+                    color={
+                      late
+                        ? C.danger
+                        : f.status === "pending"
+                          ? C.muted
+                          : C.success
                     }
                   />
+                  <Text
+                    style={{
+                      fontSize: 12.5,
+                      color: late ? C.danger : C.muted,
+                      fontWeight: late ? "800" : "500",
+                    }}
+                  >
+                    {fmtDateTime(f.due_at)}
+                    {late ? " · late" : ""}
+                    {f.status !== "pending" ? ` · ${f.status}` : ""}
+                  </Text>
                 </View>
-              </View>
-              <Text style={{ fontWeight: "700", color: C.text, fontSize: 14.5, textDecorationLine: f.status === "pending" ? "none" : "line-through" }}>
-                {f.title}
-              </Text>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 5, marginTop: 4 }}>
-                <Ionicons name={late ? "alert-circle" : f.status === "pending" ? "time-outline" : "checkmark-circle"} size={13} color={late ? C.danger : f.status === "pending" ? C.muted : C.success} />
-                <Text style={{ fontSize: 12.5, color: late ? C.danger : C.muted, fontWeight: late ? "800" : "500" }}>
-                  {fmtDateTime(f.due_at)}
-                  {late ? " · late" : ""}
-                  {f.status !== "pending" ? ` · ${f.status}` : ""}
-                </Text>
-              </View>
-              {f.outcome ? (
-                <Text style={{ fontSize: 13, color: "#334155", marginTop: 6, backgroundColor: "#F8FAFC", borderRadius: 10, padding: 8 }}>
-                  {f.outcome}
-                </Text>
-              ) : null}
+                {f.outcome ? (
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      color: "#334155",
+                      marginTop: 6,
+                      backgroundColor: "#F8FAFC",
+                      borderRadius: 10,
+                      padding: 8,
+                    }}
+                  >
+                    {f.outcome}
+                  </Text>
+                ) : null}
               </View>
             </Card>
           );
@@ -449,15 +592,37 @@ export function TasksPanel(parent) {
         <Loading />
       ) : !q.data?.length ? (
         <Card>
-          <Empty title="No tasks yet" hint="Add things that need doing, like sending a quote." icon="checkbox-outline" />
+          <Empty
+            title="No tasks yet"
+            hint="Add things that need doing, like sending a quote."
+            icon="checkbox-outline"
+          />
         </Card>
       ) : (
         q.data.map((t) => (
           <Card key={t.id} style={{ paddingVertical: 11 }}>
             <View style={s.row}>
-              <Pressable onPress={() => toggle.mutate(t)} hitSlop={10} accessibilityRole="checkbox" accessibilityState={{ checked: t.status === "done" }}>
-                <View style={{ width: 24, height: 24, borderRadius: 12, borderWidth: 2, borderColor: t.status === "done" ? C.brand : "#CBD5E1", backgroundColor: t.status === "done" ? C.brand : "#fff", alignItems: "center", justifyContent: "center" }}>
-                  {t.status === "done" && <Ionicons name="checkmark" size={15} color="#fff" />}
+              <Pressable
+                onPress={() => toggle.mutate(t)}
+                hitSlop={10}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: t.status === "done" }}
+              >
+                <View
+                  style={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: 12,
+                    borderWidth: 2,
+                    borderColor: t.status === "done" ? C.brand : "#CBD5E1",
+                    backgroundColor: t.status === "done" ? C.brand : "#fff",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {t.status === "done" && (
+                    <Ionicons name="checkmark" size={15} color="#fff" />
+                  )}
                 </View>
               </Pressable>
               <Pressable style={{ flex: 1 }} onPress={() => setModal(t)}>
@@ -483,7 +648,11 @@ export function TasksPanel(parent) {
                 onPress={() =>
                   Alert.alert("Delete task?", t.title, [
                     { text: "Cancel" },
-                    { text: "Delete", style: "destructive", onPress: () => del.mutate(t.id) },
+                    {
+                      text: "Delete",
+                      style: "destructive",
+                      onPress: () => del.mutate(t.id),
+                    },
                   ])
                 }
               />
@@ -514,14 +683,43 @@ export function TasksPanel(parent) {
 
 // ---------------- Documents (camera / gallery / files) ----------------
 const SOURCES = [
-  { key: "camera", icon: "camera", title: "Camera", sub: "Take a photo", color: "#0284C7", bg: "#E0F2FE" },
-  { key: "gallery", icon: "images", title: "Gallery", sub: "Photos & videos", color: "#7C3AED", bg: "#EDE9FE" },
-  { key: "files", icon: "document-attach", title: "Files", sub: "PDF, Word, Excel…", color: "#D97706", bg: "#FEF3C7" },
+  {
+    key: "camera",
+    icon: "camera",
+    title: "Camera",
+    sub: "Take a photo",
+    color: "#0284C7",
+    bg: "#E0F2FE",
+  },
+  {
+    key: "gallery",
+    icon: "images",
+    title: "Gallery",
+    sub: "Photos & videos",
+    color: "#7C3AED",
+    bg: "#EDE9FE",
+  },
+  {
+    key: "files",
+    icon: "document-attach",
+    title: "Files",
+    sub: "PDF, Word, Excel…",
+    color: "#D97706",
+    bg: "#FEF3C7",
+  },
 ];
 const kindOfFile = (mime, name) => {
-  const ext = String(name || "").split(".").pop().toLowerCase();
-  if (mime?.startsWith("image/") || ["jpg", "jpeg", "png", "gif", "webp", "heic"].includes(ext)) return "image";
-  if (mime?.startsWith("video/") || ["mp4", "mov", "3gp", "mkv"].includes(ext)) return "video";
+  const ext = String(name || "")
+    .split(".")
+    .pop()
+    .toLowerCase();
+  if (
+    mime?.startsWith("image/") ||
+    ["jpg", "jpeg", "png", "gif", "webp", "heic"].includes(ext)
+  )
+    return "image";
+  if (mime?.startsWith("video/") || ["mp4", "mov", "3gp", "mkv"].includes(ext))
+    return "video";
   if (mime === "application/pdf" || ext === "pdf") return "pdf";
   return "file";
 };
@@ -531,13 +729,23 @@ const FILE_STYLE = {
   pdf: ["document-text", "#DC2626", "#FEE2E2"],
   file: ["document", "#0284C7", "#E0F2FE"],
 };
-const sizeText = (b) => (!b ? "" : b > 1024 * 1024 ? `${(b / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.round(b / 1024))} KB`);
+const sizeText = (b) =>
+  !b
+    ? ""
+    : b > 1024 * 1024
+      ? `${(b / 1024 / 1024).toFixed(1)} MB`
+      : `${Math.max(1, Math.round(b / 1024))} KB`;
 const stamp = () => format(new Date(), "d MMM, h.mm a");
 /** Turn camera names like "3f9c2e1a-77b0-4c1d-….jpeg" into "Photo 24 Oct, 3.45 PM". */
 function niceName(d) {
   const name = d.name || "File";
   const base = name.replace(/\.[^.]+$/, "");
-  const random = /^[0-9a-f-]{16,}$/i.test(base) || /^(ImagePicker|rn_image_picker|image_\d{10,}|photo_\d{10,}|file_\d{10,})/i.test(base) || /^[A-Za-z0-9_-]{28,}$/.test(base);
+  const random =
+    /^[0-9a-f-]{16,}$/i.test(base) ||
+    /^(ImagePicker|rn_image_picker|image_\d{10,}|photo_\d{10,}|file_\d{10,})/i.test(
+      base,
+    ) ||
+    /^[A-Za-z0-9_-]{28,}$/.test(base);
   const k = kindOfFile(d.mime_type, name);
   if (!random) return k === "image" || k === "video" ? base : name; // photos: no ".jpg" at the end
   return `${k === "video" ? "Video" : k === "image" ? "Photo" : "File"} ${format(new Date(d.created_at), "d MMM, h.mm a")}`;
@@ -566,7 +774,19 @@ function DocTile({ d, size, onPress, onEdit, onDelete, canManage }) {
       onPress={onPress}
       style={({ pressed }) => ({ width: size, opacity: pressed ? 0.75 : 1 })}
     >
-      <View style={{ width: size, height: size, borderRadius: 16, overflow: "hidden", backgroundColor: k === "image" ? "#E2E8F0" : bg, borderWidth: 1, borderColor: C.border, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          width: size,
+          height: size,
+          borderRadius: 16,
+          overflow: "hidden",
+          backgroundColor: k === "image" ? "#E2E8F0" : bg,
+          borderWidth: 1,
+          borderColor: C.border,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         {k === "image" && url.data && !failed ? (
           <Image
             source={{ uri: url.data }}
@@ -579,28 +799,90 @@ function DocTile({ d, size, onPress, onEdit, onDelete, canManage }) {
           <ActivityIndicator color="#7C3AED" />
         ) : (
           <>
-            <View style={{ width: 44, height: 44, borderRadius: 22, alignItems: "center", justifyContent: "center", backgroundColor: k === "video" ? "rgba(255,255,255,0.15)" : "#fff" }}>
-              <Ionicons name={failed ? "image-outline" : icon} size={22} color={k === "video" ? "#fff" : fg} />
+            <View
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 22,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor:
+                  k === "video" ? "rgba(255,255,255,0.15)" : "#fff",
+              }}
+            >
+              <Ionicons
+                name={failed ? "image-outline" : icon}
+                size={22}
+                color={k === "video" ? "#fff" : fg}
+              />
             </View>
             {!!ext && k !== "video" && (
-              <Text style={{ marginTop: 6, fontSize: 11, fontWeight: "800", color: fg }}>{ext}</Text>
+              <Text
+                style={{
+                  marginTop: 6,
+                  fontSize: 11,
+                  fontWeight: "800",
+                  color: fg,
+                }}
+              >
+                {ext}
+              </Text>
             )}
           </>
         )}
       </View>
       {canManage && (
-        <View style={{ flexDirection: "row", justifyContent: "space-around", marginTop: 5 }}>
-          <Pressable accessibilityLabel={`Replace ${niceName(d)}`} onPress={onEdit} hitSlop={8} style={{ padding: 5, flexDirection: "row", alignItems: "center", gap: 3 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            marginTop: 5,
+          }}
+        >
+          <Pressable
+            accessibilityLabel={`Replace ${niceName(d)}`}
+            onPress={onEdit}
+            hitSlop={8}
+            style={{
+              padding: 5,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
             <Ionicons name="create-outline" size={16} color={C.brand} />
-            <Text style={{ color: C.brand, fontSize: 11, fontWeight: "700" }}>Edit</Text>
+            <Text style={{ color: C.brand, fontSize: 11, fontWeight: "700" }}>
+              Edit
+            </Text>
           </Pressable>
-          <Pressable accessibilityLabel={`Delete ${niceName(d)}`} onPress={onDelete} hitSlop={8} style={{ padding: 5, flexDirection: "row", alignItems: "center", gap: 3 }}>
+          <Pressable
+            accessibilityLabel={`Delete ${niceName(d)}`}
+            onPress={onDelete}
+            hitSlop={8}
+            style={{
+              padding: 5,
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
             <Ionicons name="trash-outline" size={16} color={C.danger} />
-            <Text style={{ color: C.danger, fontSize: 11, fontWeight: "700" }}>Delete</Text>
+            <Text style={{ color: C.danger, fontSize: 11, fontWeight: "700" }}>
+              Delete
+            </Text>
           </Pressable>
         </View>
       )}
-      <Text numberOfLines={1} ellipsizeMode="middle" style={{ fontSize: 11.5, fontWeight: "600", color: C.text, marginTop: 5 }}>
+      <Text
+        numberOfLines={1}
+        ellipsizeMode="middle"
+        style={{
+          fontSize: 11.5,
+          fontWeight: "600",
+          color: C.text,
+          marginTop: 5,
+        }}
+      >
         {niceName(d)}
       </Text>
     </Pressable>
@@ -614,20 +896,75 @@ function PhotoViewer({ doc, canDelete, onDelete, onClose }) {
   const [loading, setLoading] = useState(true);
   if (!doc) return null;
   return (
-    <Modal visible animationType="fade" onRequestClose={onClose} statusBarTranslucent navigationBarTranslucent>
+    <Modal
+      visible
+      animationType="fade"
+      onRequestClose={onClose}
+      statusBarTranslucent
+      navigationBarTranslucent
+    >
       <View style={{ flex: 1, backgroundColor: "#000" }}>
-        <View style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 2, paddingTop: insets.top + 8, paddingHorizontal: 12, paddingBottom: 10, flexDirection: "row", alignItems: "center", gap: 8, backgroundColor: "rgba(0,0,0,0.45)" }}>
-          <Pressable onPress={onClose} hitSlop={10} style={{ width: 40, height: 40, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(255,255,255,0.15)" }}>
+        <View
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 2,
+            paddingTop: insets.top + 8,
+            paddingHorizontal: 12,
+            paddingBottom: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            backgroundColor: "rgba(0,0,0,0.45)",
+          }}
+        >
+          <Pressable
+            onPress={onClose}
+            hitSlop={10}
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: 20,
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(255,255,255,0.15)",
+            }}
+          >
             <Ionicons name="close" size={22} color="#fff" />
           </Pressable>
           <View style={{ flex: 1 }}>
-            <Text numberOfLines={1} ellipsizeMode="middle" style={{ color: "#fff", fontWeight: "800", fontSize: 15 }}>{niceName(doc)}</Text>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="middle"
+              style={{ color: "#fff", fontWeight: "800", fontSize: 15 }}
+            >
+              {niceName(doc)}
+            </Text>
             <Text numberOfLines={1} style={{ color: "#CBD5E1", fontSize: 12 }}>
-              {[sizeText(doc.size_bytes), doc.uploader?.full_name, fmtRelative(doc.created_at)].filter(Boolean).join(" · ")}
+              {[
+                sizeText(doc.size_bytes),
+                doc.uploader?.full_name,
+                fmtRelative(doc.created_at),
+              ]
+                .filter(Boolean)
+                .join(" · ")}
             </Text>
           </View>
           {canDelete && (
-            <Pressable onPress={onDelete} hitSlop={10} style={{ width: 40, height: 40, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor: "rgba(255,255,255,0.15)" }}>
+            <Pressable
+              onPress={onDelete}
+              hitSlop={10}
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "rgba(255,255,255,0.15)",
+              }}
+            >
               <Ionicons name="trash-outline" size={20} color="#FCA5A5" />
             </Pressable>
           )}
@@ -641,7 +978,18 @@ function PhotoViewer({ doc, canDelete, onDelete, onClose }) {
           />
         ) : null}
         {(loading || !url.data) && (
-          <View style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, alignItems: "center", justifyContent: "center" }} pointerEvents="none">
+          <View
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+            pointerEvents="none"
+          >
             <ActivityIndicator color="#fff" size="large" />
           </View>
         )}
@@ -678,18 +1026,23 @@ export function DocumentsPanel(parent) {
       }
       setProgress({ done: i + 1, total: files.length });
     }
-    setProgress(null);
-    qc.invalidateQueries({ queryKey: ["documents"] });
-    await qc.invalidateQueries({ queryKey: ["activities"] });
+    // Keep the uploading indicator on until the document list has actually refreshed,
+    // so there is no blank gap between "upload complete" and the file showing up.
+    qc.invalidateQueries({ queryKey: ["activities"] });
+    await qc.invalidateQueries({ queryKey: ["documents"] });
     if (!failed && replacing && files.length === 1) {
       try {
         await deleteDocument(replacing);
-        qc.invalidateQueries({ queryKey: ["documents"] });
-        await qc.invalidateQueries({ queryKey: ["activities"] });
+        qc.invalidateQueries({ queryKey: ["activities"] });
+        await qc.invalidateQueries({ queryKey: ["documents"] });
       } catch (e) {
-        Alert.alert("Replacement uploaded", `The new file was uploaded, but the old file could not be removed: ${errMsg(e)}`);
+        Alert.alert(
+          "Replacement uploaded",
+          `The new file was uploaded, but the old file could not be removed: ${errMsg(e)}`,
+        );
       }
     }
+    setProgress(null);
     setReplacing(null);
     if (failed)
       Alert.alert(
@@ -699,33 +1052,60 @@ export function DocumentsPanel(parent) {
   }
   /** Give camera / gallery files a short readable name. */
   const asFile = (a, label, i, total) => {
-    const ext = (a.mimeType?.split("/")[1] || (a.uri.split(".").pop() ?? "jpg")).replace("jpeg", "jpg").slice(0, 4);
+    const ext = (a.mimeType?.split("/")[1] || (a.uri.split(".").pop() ?? "jpg"))
+      .replace("jpeg", "jpg")
+      .slice(0, 4);
     const own = a.fileName ?? a.name;
     const ownOk = own && own.length <= 40 && !/^[0-9a-f-]{16,}\./i.test(own);
-    const name = ownOk ? own : `${label} ${stamp()}${total > 1 ? ` (${i + 1})` : ""}.${ext}`;
-    return { uri: a.uri, name, mimeType: a.mimeType, size: a.fileSize ?? a.size };
+    const name = ownOk
+      ? own
+      : `${label} ${stamp()}${total > 1 ? ` (${i + 1})` : ""}.${ext}`;
+    return {
+      uri: a.uri,
+      name,
+      mimeType: a.mimeType,
+      size: a.fileSize ?? a.size,
+    };
   };
   async function fromCamera() {
     const perm = await ImagePicker.requestCameraPermissionsAsync();
     if (!perm.granted)
-      return Alert.alert("Camera blocked", "Allow camera access for this app in your phone settings.");
+      return Alert.alert(
+        "Camera blocked",
+        "Allow camera access for this app in your phone settings.",
+      );
     const r = await ImagePicker.launchCameraAsync({ quality: 0.7 });
-    if (r.canceled) { setReplacing(null); return; }
-    await uploadAll(r.assets.map((a, i) => asFile({ ...a, fileName: null }, "Photo", i, r.assets.length)));
+    if (r.canceled) {
+      setReplacing(null);
+      return;
+    }
+    await uploadAll(
+      r.assets.map((a, i) =>
+        asFile({ ...a, fileName: null }, "Photo", i, r.assets.length),
+      ),
+    );
   }
   async function fromGallery() {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!perm.granted)
-      return Alert.alert("Gallery blocked", "Allow photo access for this app in your phone settings.");
+      return Alert.alert(
+        "Gallery blocked",
+        "Allow photo access for this app in your phone settings.",
+      );
     const r = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ["images", "videos"],
       quality: 0.8,
       allowsMultipleSelection: !replacing,
       selectionLimit: replacing ? 1 : 10,
     });
-    if (r.canceled) { setReplacing(null); return; }
+    if (r.canceled) {
+      setReplacing(null);
+      return;
+    }
     await uploadAll(
-      r.assets.map((a, i) => asFile(a, a.type === "video" ? "Video" : "Photo", i, r.assets.length)),
+      r.assets.map((a, i) =>
+        asFile(a, a.type === "video" ? "Video" : "Photo", i, r.assets.length),
+      ),
     );
   }
   async function fromFiles() {
@@ -733,12 +1113,24 @@ export function DocumentsPanel(parent) {
       multiple: !replacing,
       copyToCacheDirectory: true,
     });
-    if (r.canceled) { setReplacing(null); return; }
-    await uploadAll(r.assets.map((a) => ({ uri: a.uri, name: a.name, mimeType: a.mimeType, size: a.size })));
+    if (r.canceled) {
+      setReplacing(null);
+      return;
+    }
+    await uploadAll(
+      r.assets.map((a) => ({
+        uri: a.uri,
+        name: a.name,
+        mimeType: a.mimeType,
+        size: a.size,
+      })),
+    );
   }
   function choose(key) {
     setPicker(false);
-    const run = { camera: fromCamera, gallery: fromGallery, files: fromFiles }[key];
+    const run = { camera: fromCamera, gallery: fromGallery, files: fromFiles }[
+      key
+    ];
     // wait for the sheet to close before opening the camera / gallery
     setTimeout(() => run().catch((e) => Alert.alert("Error", errMsg(e))), 450);
   }
@@ -764,17 +1156,34 @@ export function DocumentsPanel(parent) {
       { text: "Cancel", style: "cancel" },
       { text: "Delete", style: "destructive", onPress: () => del.mutate(d) },
     ]);
-  const tap = (d) => (kindOfFile(d.mime_type, d.name) === "image" ? setViewing(d) : openExternal(d));
+  const tap = (d) =>
+    kindOfFile(d.mime_type, d.name) === "image"
+      ? setViewing(d)
+      : openExternal(d);
   const editDocument = (d) => {
     setReplacing(d);
     setPicker(true);
   };
   const longPress = (d) =>
-    Alert.alert(niceName(d), [sizeText(d.size_bytes), d.uploader?.full_name].filter(Boolean).join(" · ") || undefined, [
-      { text: "Open", onPress: () => tap(d) },
-      ...(canDelete(d) ? [{ text: "Delete", style: "destructive", onPress: () => confirmDelete(d) }] : []),
-      { text: "Close", style: "cancel" },
-    ]);
+    Alert.alert(
+      niceName(d),
+      [sizeText(d.size_bytes), d.uploader?.full_name]
+        .filter(Boolean)
+        .join(" · ") || undefined,
+      [
+        { text: "Open", onPress: () => tap(d) },
+        ...(canDelete(d)
+          ? [
+              {
+                text: "Delete",
+                style: "destructive",
+                onPress: () => confirmDelete(d),
+              },
+            ]
+          : []),
+        { text: "Close", style: "cancel" },
+      ],
+    );
   const busy = !!progress;
   const docs = q.data ?? [];
 
@@ -791,14 +1200,42 @@ export function DocumentsPanel(parent) {
       />
 
       {busy && (
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 12, backgroundColor: "#E0F2FE", borderRadius: 14, padding: 12, marginBottom: 10 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 12,
+            backgroundColor: "#E0F2FE",
+            borderRadius: 14,
+            padding: 12,
+            marginBottom: 10,
+          }}
+        >
           <ActivityIndicator color="#0284C7" />
           <View style={{ flex: 1 }}>
             <Text style={{ fontWeight: "800", color: "#075985" }}>
-              Uploading{progress.total > 1 ? ` ${Math.min(progress.done + 1, progress.total)} of ${progress.total}` : ""}…
+              Uploading
+              {progress.total > 1
+                ? ` ${Math.min(progress.done + 1, progress.total)} of ${progress.total}`
+                : ""}
+              …
             </Text>
-            <View style={{ height: 6, borderRadius: 3, backgroundColor: "#BAE6FD", marginTop: 6, overflow: "hidden" }}>
-              <View style={{ width: `${Math.max(8, (progress.done / progress.total) * 100)}%`, height: 6, backgroundColor: "#0284C7" }} />
+            <View
+              style={{
+                height: 6,
+                borderRadius: 3,
+                backgroundColor: "#BAE6FD",
+                marginTop: 6,
+                overflow: "hidden",
+              }}
+            >
+              <View
+                style={{
+                  width: `${Math.max(8, (progress.done / progress.total) * 100)}%`,
+                  height: 6,
+                  backgroundColor: "#0284C7",
+                }}
+              />
             </View>
           </View>
         </View>
@@ -808,22 +1245,70 @@ export function DocumentsPanel(parent) {
         <Loading />
       ) : !docs.length ? (
         <Pressable onPress={() => !busy && setPicker(true)}>
-          <View style={{ alignItems: "center", padding: 22, borderRadius: 16, borderWidth: 1.5, borderStyle: "dashed", borderColor: "#CBD5E1", backgroundColor: "#fff", marginBottom: 10 }}>
-            <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: "#E0F2FE", alignItems: "center", justifyContent: "center" }}>
+          <View
+            style={{
+              alignItems: "center",
+              padding: 22,
+              borderRadius: 16,
+              borderWidth: 1.5,
+              borderStyle: "dashed",
+              borderColor: "#CBD5E1",
+              backgroundColor: "#fff",
+              marginBottom: 10,
+            }}
+          >
+            <View
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: 24,
+                backgroundColor: "#E0F2FE",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
               <Ionicons name="cloud-upload" size={24} color="#0284C7" />
             </View>
-            <Text style={{ fontWeight: "800", color: C.text, marginTop: 8 }}>No documents yet</Text>
-            <Text style={{ color: C.muted, fontSize: 12.5, marginTop: 2 }}>Tap to add a photo or file</Text>
+            <Text style={{ fontWeight: "800", color: C.text, marginTop: 8 }}>
+              No documents yet
+            </Text>
+            <Text style={{ color: C.muted, fontSize: 12.5, marginTop: 2 }}>
+              Tap to add a photo or file
+            </Text>
           </View>
         </Pressable>
       ) : (
-        <View style={{ backgroundColor: "#fff", borderRadius: 16, borderWidth: 1, borderColor: C.border, padding: 10, marginBottom: 10 }}>
+        <View
+          style={{
+            backgroundColor: "#fff",
+            borderRadius: 16,
+            borderWidth: 1,
+            borderColor: C.border,
+            padding: 10,
+            marginBottom: 10,
+          }}
+        >
           <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
             {docs.map((d) => (
-              <DocTile key={d.id} d={d} size={tile - 7} onPress={() => tap(d)} canManage={canDelete(d) && !busy} onEdit={() => editDocument(d)} onDelete={() => confirmDelete(d)} />
+              <DocTile
+                key={d.id}
+                d={d}
+                size={tile - 7}
+                onPress={() => tap(d)}
+                canManage={canDelete(d) && !busy}
+                onEdit={() => editDocument(d)}
+                onDelete={() => confirmDelete(d)}
+              />
             ))}
           </View>
-          <Text style={{ color: C.faint, fontSize: 11.5, marginTop: 10, textAlign: "center" }}>
+          <Text
+            style={{
+              color: C.faint,
+              fontSize: 11.5,
+              marginTop: 10,
+              textAlign: "center",
+            }}
+          >
             Tap to view · use Edit or Delete below each file
           </Text>
         </View>
@@ -838,7 +1323,14 @@ export function DocumentsPanel(parent) {
       />
 
       {/* ---------- choose where the file comes from ---------- */}
-      <Sheet open={picker} onClose={() => { setPicker(false); setReplacing(null); }} title={replacing ? "Replace document" : "Add a document"}>
+      <Sheet
+        open={picker}
+        onClose={() => {
+          setPicker(false);
+          setReplacing(null);
+        }}
+        title={replacing ? "Replace document" : "Add a document"}
+      >
         <View style={{ flexDirection: "row", gap: 10 }}>
           {SOURCES.map((src) => (
             <Pressable
@@ -855,15 +1347,51 @@ export function DocumentsPanel(parent) {
                 borderColor: C.border,
               })}
             >
-              <View style={{ width: 54, height: 54, borderRadius: 27, backgroundColor: src.bg, alignItems: "center", justifyContent: "center" }}>
+              <View
+                style={{
+                  width: 54,
+                  height: 54,
+                  borderRadius: 27,
+                  backgroundColor: src.bg,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Ionicons name={src.icon} size={26} color={src.color} />
               </View>
-              <Text numberOfLines={1} style={{ fontWeight: "800", color: C.text, marginTop: 10, fontSize: 14 }}>{src.title}</Text>
-              <Text numberOfLines={2} style={{ color: C.muted, fontSize: 11.5, marginTop: 2, textAlign: "center" }}>{src.sub}</Text>
+              <Text
+                numberOfLines={1}
+                style={{
+                  fontWeight: "800",
+                  color: C.text,
+                  marginTop: 10,
+                  fontSize: 14,
+                }}
+              >
+                {src.title}
+              </Text>
+              <Text
+                numberOfLines={2}
+                style={{
+                  color: C.muted,
+                  fontSize: 11.5,
+                  marginTop: 2,
+                  textAlign: "center",
+                }}
+              >
+                {src.sub}
+              </Text>
             </Pressable>
           ))}
         </View>
-        <Text style={{ color: C.faint, fontSize: 12, textAlign: "center", marginTop: 14 }}>
+        <Text
+          style={{
+            color: C.faint,
+            fontSize: 12,
+            textAlign: "center",
+            marginTop: 14,
+          }}
+        >
           Up to 25 MB per file
         </Text>
       </Sheet>
@@ -885,7 +1413,13 @@ export function PaymentsPanel({ clientId }) {
     .reduce((a, p) => a + Number(p.amount), 0);
   return (
     <View>
-      <SectionTitle title="Payments" icon="wallet" color="#16A34A" bg="#DCFCE7" count={q.data?.length ?? 0} />
+      <SectionTitle
+        title="Payments"
+        icon="wallet"
+        color="#16A34A"
+        bg="#DCFCE7"
+        count={q.data?.length ?? 0}
+      />
       <Card>
         <View style={[s.row, { justifyContent: "space-around" }]}>
           <View style={{ alignItems: "center" }}>
