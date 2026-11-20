@@ -24,9 +24,10 @@
         "backgroundColor": "#0F2F58"
       },
       "permissions": [
-        "CAMERA",
-        "READ_EXTERNAL_STORAGE",
-        "POST_NOTIFICATIONS"
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.POST_NOTIFICATIONS",
+        "android.permission.RECORD_AUDIO"
       ],
       "backgroundColor": "#F1F4F8"
     },
@@ -67,6 +68,11 @@
       ],
       "expo-status-bar"
     ],
-    "backgroundColor": "#F1F4F8"
+    "backgroundColor": "#F1F4F8",
+    "extra": {
+      "eas": {
+        "projectId": "09ebf319-8341-44be-9cb1-3f307a857c85"
+      }
+    }
   }
 }
