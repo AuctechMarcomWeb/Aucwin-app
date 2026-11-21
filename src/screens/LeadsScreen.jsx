@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -49,6 +49,16 @@ export default function LeadsScreen() {
   });
   const rows = q.data?.pages.flatMap((p) => p.rows) ?? [];
   const total = q.data?.pages[0]?.count ?? 0;
+
+  const renderItem = useCallback(
+    ({ item }) => (
+      <LeadRow
+        lead={item}
+        onPress={() => nav.navigate("LeadDetail", { id: item.id })}
+      />
+    ),
+    [nav],
+  );
 
   return (
     <View style={s.screen}>
@@ -102,6 +112,10 @@ export default function LeadsScreen() {
             q.hasNextPage && !q.isFetchingNextPage && q.fetchNextPage()
           }
           onEndReachedThreshold={0.4}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={7}
+          removeClippedSubviews
           ListHeaderComponent={
             <Text style={[s.muted, { marginBottom: 8 }]}>
               {total} lead{total === 1 ? "" : "s"}
@@ -111,12 +125,7 @@ export default function LeadsScreen() {
             <Empty title="No leads found" hint="Tap + to add one." />
           }
           ListFooterComponent={q.isFetchingNextPage ? <Loading /> : null}
-          renderItem={({ item }) => (
-            <LeadRow
-              lead={item}
-              onPress={() => nav.navigate("LeadDetail", { id: item.id })}
-            />
-          )}
+          renderItem={renderItem}
         />
       )}
       <Pressable
@@ -153,7 +162,7 @@ export default function LeadsScreen() {
   );
 }
 
-function LeadRow({ lead, onPress }) {
+const LeadRow = memo(function LeadRow({ lead, onPress }) {
   return (
     <Pressable
       onPress={onPress}
@@ -193,4 +202,4 @@ function LeadRow({ lead, onPress }) {
       )}
     </Pressable>
   );
-}
+});

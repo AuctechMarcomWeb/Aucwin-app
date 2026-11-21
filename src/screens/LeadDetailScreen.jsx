@@ -154,7 +154,7 @@ export default function LeadDetailScreen() {
   const focused = useIsFocused();
   const qc = useQueryClient();
   const { isAdmin } = useAuth();
-  const q = useQuery({ queryKey: ["leads", id], queryFn: () => getLead(id) });
+  const q = useQuery({ queryKey: ["lead", id], queryFn: () => getLead(id) });
   const [edit, setEdit] = useState(false);
   const [convert, setConvert] = useState(false);
   const [service, setService] = useState("");
@@ -167,14 +167,36 @@ export default function LeadDetailScreen() {
   };
   const status = useMutation({
     mutationFn: (st) => updateLead(id, { status: st }),
-    onSuccess: async () => {
-      inval();
-      await qc.refetchQueries({
-        queryKey: ["activities", { lead_id: id }],
-        type: "active",
+    // Optimistic: update the UI instantly and patch the open list in place,
+    // instead of re-fetching the whole leads list (which was the slow part).
+    onMutate: async (st) => {
+      await qc.cancelQueries({ queryKey: ["lead", id] });
+      const prev = qc.getQueryData(["lead", id]);
+      qc.setQueryData(["lead", id], (old) =>
+        old ? { ...old, status: st } : old,
+      );
+      qc.setQueriesData({ queryKey: ["leads"] }, (data) => {
+        if (!data?.pages) return data;
+        return {
+          ...data,
+          pages: data.pages.map((pg) => ({
+            ...pg,
+            rows: pg.rows.map((r) => (r.id === id ? { ...r, status: st } : r)),
+          })),
+        };
       });
+      return { prev };
     },
-    onError: (e) => Alert.alert("Error", errMsg(e)),
+    onError: (e, _st, ctx) => {
+      if (ctx?.prev) qc.setQueryData(["lead", id], ctx.prev);
+      Alert.alert("Error", errMsg(e));
+    },
+    // Light refresh only — never re-fetch the whole leads list.
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      qc.invalidateQueries({ queryKey: ["module_counts"] });
+      qc.invalidateQueries({ queryKey: ["activities", { lead_id: id }] });
+    },
   });
   const remove = useMutation({
     mutationFn: () => deleteLead(id),

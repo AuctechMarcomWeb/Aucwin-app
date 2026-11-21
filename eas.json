@@ -15,7 +15,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://harbour-backend-66ji.onrender.com"
+        "EXPO_PUBLIC_API_URL": "https://aucwinapis.auctech.ca"
       }
     },
     "production": {
@@ -23,7 +23,7 @@
         "buildType": "app-bundle"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://harbour-backend-66ji.onrender.com"
+        "EXPO_PUBLIC_API_URL": "https://aucwinapis.auctech.ca"
       }
     }
   },
