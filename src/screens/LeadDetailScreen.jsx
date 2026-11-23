@@ -20,10 +20,17 @@ import {
 } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-import { convertLead, deleteLead, getLead, updateLead } from "@/lib/api";
+import {
+  convertLead,
+  deleteLead,
+  getLead,
+  logCall,
+  updateLead,
+} from "@/lib/api";
 import { errMsg } from "@/lib/http";
 import { useAuth } from "@/lib/auth";
 import { label, LEAD_STATUSES } from "@/lib/types";
+import { useStages } from "@/lib/stages";
 import {
   Avatar,
   Button,
@@ -50,7 +57,7 @@ import {
 import { OfflineBanner } from "@/components/OfflineBanner";
 
 /** Lead stages shared with the web CRM and backend. */
-const STEPS = LEAD_STATUSES.map((key) => ({ key, name: label(key) }));
+// STEPS are built per render from the company's stages (inside the component).
 
 function openUrl(url) {
   Linking.openURL(url).catch(() =>
@@ -242,6 +249,12 @@ export default function LeadDetailScreen() {
     </Pressable>
   );
 
+  const {
+    stages: stageList,
+    labelOf: stageLabel,
+    colorOf: stageColor,
+  } = useStages();
+
   if (q.isLoading || q.error || !q.data)
     return (
       <View style={s.screen}>
@@ -269,10 +282,11 @@ export default function LeadDetailScreen() {
 
   const l = q.data;
   const lost = l.status === "junk";
+  const STEPS = stageList.map((st) => ({ key: st.key, name: st.label }));
   const setStage = (st) =>
     st !== l.status && !status.isPending && status.mutate(st);
   const digits = l.phone?.replace(/[^\d]/g, "");
-  const tone = toneOf(l.status);
+  const tone = stageColor(l.status);
   const mapUrl = l.address
     ? Platform.select({
         ios: `maps:0,0?q=${encodeURIComponent(l.address)}`,
@@ -435,7 +449,7 @@ export default function LeadDetailScreen() {
                 <Text
                   style={{ color: "#fff", fontSize: 12.5, fontWeight: "800" }}
                 >
-                  {label(l.status)}
+                  {stageLabel(l.status)}
                 </Text>
               </View>
               {l.converted_client_id && (
@@ -479,7 +493,18 @@ export default function LeadDetailScreen() {
                   icon="call"
                   text="Call"
                   color="#5EEAD4"
-                  onPress={() => openUrl(telUri(l.phone))}
+                  onPress={() => {
+                    // record the outbound call for the agent-outreach report,
+                    // then open the dialer (logging never blocks the call)
+                    logCall(id)
+                      .then(() =>
+                        qc.invalidateQueries({
+                          queryKey: ["activities", { lead_id: id }],
+                        }),
+                      )
+                      .catch(() => {});
+                    openUrl(telUri(l.phone));
+                  }}
                 />
               )}
               {digits && (

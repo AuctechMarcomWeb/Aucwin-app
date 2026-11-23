@@ -24,6 +24,7 @@ import {
   TASK_STATUSES,
   label,
 } from "@/lib/types";
+import { useStages } from "@/lib/stages";
 import {
   Button,
   C,
@@ -140,6 +141,7 @@ export function AssigneeChips({ value, onChange }) {
 
 export function LeadForm({ lead, onDone }) {
   const qc = useQueryClient();
+  const { stages } = useStages();
   const [f, setF] = useState({
     name: lead?.name ?? "",
     phone: lead?.phone ?? "",
@@ -230,7 +232,7 @@ export function LeadForm({ lead, onDone }) {
         <Chips
           value={f.status ?? "new_lead"}
           onChange={(v) => set("status", v)}
-          options={enumOptions(LEAD_STATUSES)}
+          options={stages.map((st) => ({ value: st.key, label: st.label }))}
         />
       </Field>
       <AssigneeChips

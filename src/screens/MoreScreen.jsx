@@ -74,12 +74,19 @@ function Row({ icon, iconColor, iconBg, title, sub, onPress, last, danger }) {
       <View style={{ flex: 1 }}>
         <Text
           numberOfLines={1}
-          style={{ color: danger ? C.danger : C.text, fontWeight: "700", fontSize: 15 }}
+          style={{
+            color: danger ? C.danger : C.text,
+            fontWeight: "700",
+            fontSize: 15,
+          }}
         >
           {title}
         </Text>
         {sub ? (
-          <Text numberOfLines={1} style={{ color: C.muted, fontSize: 12.5, marginTop: 1 }}>
+          <Text
+            numberOfLines={1}
+            style={{ color: C.muted, fontSize: 12.5, marginTop: 1 }}
+          >
             {sub}
           </Text>
         ) : null}
@@ -122,9 +129,18 @@ export default function MoreScreen() {
 
   async function save() {
     if (!name.trim()) return Alert.alert("Name is required");
-    if (pw && pw.length < 8) return Alert.alert("Password too short", "Use at least 8 characters.");
-    if (pw && !curPw) return Alert.alert("Current password needed", "Type your current password to set a new one.");
-    if (pw && pw === curPw) return Alert.alert("Same password", "The new password must be different from your current one.");
+    if (pw && pw.length < 8)
+      return Alert.alert("Password too short", "Use at least 8 characters.");
+    if (pw && !curPw)
+      return Alert.alert(
+        "Current password needed",
+        "Type your current password to set a new one.",
+      );
+    if (pw && pw === curPw)
+      return Alert.alert(
+        "Same password",
+        "The new password must be different from your current one.",
+      );
     setBusy(true);
     try {
       if (profile)
@@ -140,7 +156,12 @@ export default function MoreScreen() {
       setEdit(false);
       setPw("");
       setCurPw("");
-      Alert.alert("Saved", pw ? "Your profile and password were updated. Other devices are signed out." : "Your profile was updated.");
+      Alert.alert(
+        "Saved",
+        pw
+          ? "Your profile and password were updated. Other devices are signed out."
+          : "Your profile was updated.",
+      );
     } catch (e) {
       Alert.alert("Could not save", errMsg(e));
     } finally {
@@ -185,7 +206,10 @@ export default function MoreScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: C.bg }}>
       {focused && <StatusBar style="light" />}
-      <ScrollView contentContainerStyle={{ paddingBottom: 32 }} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={{ paddingBottom: 32 }}
+        showsVerticalScrollIndicator={false}
+      >
         {/* ================= dark header with your profile ================= */}
         <View
           style={{
@@ -198,23 +222,83 @@ export default function MoreScreen() {
             overflow: "hidden",
           }}
         >
-          <View pointerEvents="none" style={{ position: "absolute", top: -60, right: -50, width: 190, height: 190, borderRadius: 95, backgroundColor: C.accent, opacity: 0.16 }} />
-          <View pointerEvents="none" style={{ position: "absolute", bottom: -70, left: -40, width: 150, height: 150, borderRadius: 75, backgroundColor: C.accent, opacity: 0.08 }} />
+          <View
+            pointerEvents="none"
+            style={{
+              position: "absolute",
+              top: -60,
+              right: -50,
+              width: 190,
+              height: 190,
+              borderRadius: 95,
+              backgroundColor: C.accent,
+              opacity: 0.16,
+            }}
+          />
+          <View
+            pointerEvents="none"
+            style={{
+              position: "absolute",
+              bottom: -70,
+              left: -40,
+              width: 150,
+              height: 150,
+              borderRadius: 75,
+              backgroundColor: C.accent,
+              opacity: 0.08,
+            }}
+          />
 
           <View style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
-            <View style={{ borderRadius: 34, borderWidth: 2, borderColor: "rgba(255,255,255,0.35)" }}>
+            <View
+              style={{
+                borderRadius: 34,
+                borderWidth: 2,
+                borderColor: "rgba(255,255,255,0.35)",
+              }}
+            >
               <Avatar name={profile?.full_name} size={60} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text numberOfLines={1} adjustsFontSizeToFit style={{ color: "#fff", fontSize: 21, fontWeight: "800", letterSpacing: -0.3 }}>
+              <Text
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                style={{
+                  color: "#fff",
+                  fontSize: 21,
+                  fontWeight: "800",
+                  letterSpacing: -0.3,
+                }}
+              >
                 {profile?.full_name}
               </Text>
-              <Text numberOfLines={1} style={{ color: "#94A3B8", fontSize: 13, marginTop: 2 }}>
+              <Text
+                numberOfLines={1}
+                style={{ color: "#94A3B8", fontSize: 13, marginTop: 2 }}
+              >
                 {profile?.email}
               </Text>
               {!!roleLine && (
-                <View style={{ alignSelf: "flex-start", marginTop: 7, backgroundColor: "rgba(18,172,162,0.25)", borderRadius: 999, paddingHorizontal: 10, paddingVertical: 3 }}>
-                  <Text numberOfLines={1} style={{ color: "#CCFBF1", fontSize: 12, fontWeight: "700" }}>{roleLine}</Text>
+                <View
+                  style={{
+                    alignSelf: "flex-start",
+                    marginTop: 7,
+                    backgroundColor: "rgba(18,172,162,0.25)",
+                    borderRadius: 999,
+                    paddingHorizontal: 10,
+                    paddingVertical: 3,
+                  }}
+                >
+                  <Text
+                    numberOfLines={1}
+                    style={{
+                      color: "#CCFBF1",
+                      fontSize: 12,
+                      fontWeight: "700",
+                    }}
+                  >
+                    {roleLine}
+                  </Text>
                 </View>
               )}
             </View>
@@ -230,13 +314,17 @@ export default function MoreScreen() {
               gap: 8,
               paddingVertical: 11,
               borderRadius: 14,
-              backgroundColor: pressed ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
+              backgroundColor: pressed
+                ? "rgba(255,255,255,0.2)"
+                : "rgba(255,255,255,0.1)",
               borderWidth: 1,
               borderColor: "rgba(255,255,255,0.12)",
             })}
           >
             <Ionicons name="create-outline" size={17} color="#fff" />
-            <Text style={{ color: "#fff", fontWeight: "700", fontSize: 14 }}>Edit profile & password</Text>
+            <Text style={{ color: "#fff", fontWeight: "700", fontSize: 14 }}>
+              Edit profile & password
+            </Text>
           </Pressable>
         </View>
 
@@ -256,15 +344,41 @@ export default function MoreScreen() {
               />
             ))}
             {isAdmin && (
-              <Row
-                icon="stats-chart"
-                iconColor={C.brand}
-                iconBg={C.brandLight}
-                title="Team overview"
-                sub="Pipeline, money and team performance"
-                onPress={() => nav.navigate("Overview")}
-                last
-              />
+              <>
+                <Row
+                  icon="stats-chart"
+                  iconColor={C.brand}
+                  iconBg={C.brandLight}
+                  title="Team overview"
+                  sub="Pipeline, money and team performance"
+                  onPress={() => nav.navigate("Overview")}
+                />
+                <Row
+                  icon="git-network"
+                  iconColor="#2563EB"
+                  iconBg="#DBEAFE"
+                  title="Data Sources"
+                  sub="Where your leads come from"
+                  onPress={() => nav.navigate("DataSources")}
+                />
+                <Row
+                  icon="bar-chart"
+                  iconColor="#7C3AED"
+                  iconBg="#EDE9FE"
+                  title="Reports"
+                  sub="Agent outreach and calls"
+                  onPress={() => nav.navigate("Reports")}
+                />
+                <Row
+                  icon="git-branch"
+                  iconColor="#0D9488"
+                  iconBg="#CCFBF1"
+                  title="Lead Stages"
+                  sub="Add, rename, recolour and reorder your pipeline"
+                  onPress={() => nav.navigate("Stages")}
+                  last
+                />
+              </>
             )}
           </Group>
 
@@ -287,17 +401,27 @@ export default function MoreScreen() {
               danger
               last
               onPress={() =>
-                Alert.alert("Sign out?", "You will need your email and password to sign in again.", [
-                  { text: "Cancel", style: "cancel" },
-                  { text: "Sign out", style: "destructive", onPress: signOut },
-                ])
+                Alert.alert(
+                  "Sign out?",
+                  "You will need your email and password to sign in again.",
+                  [
+                    { text: "Cancel", style: "cancel" },
+                    {
+                      text: "Sign out",
+                      style: "destructive",
+                      onPress: signOut,
+                    },
+                  ],
+                )
               }
             />
           </Group>
 
           <View style={{ alignItems: "center", marginTop: 24, gap: 6 }}>
             <BrandLogo width={150} />
-            <Text style={{ textAlign: "center", color: C.faint, fontSize: 12 }}>Version 1.0.0</Text>
+            <Text style={{ textAlign: "center", color: C.faint, fontSize: 12 }}>
+              Version 1.0.0
+            </Text>
           </View>
         </View>
       </ScrollView>
@@ -307,19 +431,52 @@ export default function MoreScreen() {
           <Input value={name} onChangeText={setName} autoCapitalize="words" />
         </Field>
         <Field label="Phone">
-          <Input value={phone} onChangeText={setPhone} keyboardType="phone-pad" />
+          <Input
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
+          />
         </Field>
-        <View style={{ backgroundColor: "#F8FAFC", borderRadius: 14, padding: 12, borderWidth: 1, borderColor: C.border, marginBottom: 14 }}>
-          <Text style={{ fontSize: 13, fontWeight: "800", color: C.text, marginBottom: 10 }}>Change password (optional)</Text>
+        <View
+          style={{
+            backgroundColor: "#F8FAFC",
+            borderRadius: 14,
+            padding: 12,
+            borderWidth: 1,
+            borderColor: C.border,
+            marginBottom: 14,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 13,
+              fontWeight: "800",
+              color: C.text,
+              marginBottom: 10,
+            }}
+          >
+            Change password (optional)
+          </Text>
           <Field label="New password">
-            <PasswordInput value={pw} onChangeText={setPw} placeholder="At least 8 characters" />
+            <PasswordInput
+              value={pw}
+              onChangeText={setPw}
+              placeholder="At least 8 characters"
+            />
           </Field>
           {!!pw && (
             <Field label="Current password">
-              <PasswordInput value={curPw} onChangeText={setCurPw} placeholder="Your current password" />
+              <PasswordInput
+                value={curPw}
+                onChangeText={setCurPw}
+                placeholder="Your current password"
+              />
             </Field>
           )}
-          <Text style={{ fontSize: 12, color: C.muted, marginTop: -4 }}>Leave empty to keep your password. Changing it signs you out on other devices.</Text>
+          <Text style={{ fontSize: 12, color: C.muted, marginTop: -4 }}>
+            Leave empty to keep your password. Changing it signs you out on
+            other devices.
+          </Text>
         </View>
         <Button title="Save" onPress={save} loading={busy} />
       </Sheet>

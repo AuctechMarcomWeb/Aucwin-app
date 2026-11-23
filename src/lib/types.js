@@ -1,16 +1,20 @@
 // Lead pipeline, in order — from a brand-new lead through to a closed sale,
 // with the negative/closed outcomes grouped at the end.
+// Fallback pipeline — the app loads the company's real stages from the API
+// (see lib/stages.js). This list is only used until those arrive.
 export const LEAD_STATUSES = [
   "new_lead",
   "prospect",
-  "qualified",
   "follow_up",
+  "qualified",
   "meeting_scheduled",
-  "meeting_done",
   "rspv",
+  "meeting_done",
   "sale_done",
   "unreachable",
   "dnp",
+  "not_interested",
+  "hanged_up",
   "junk",
 ];
 export const LEAD_SOURCES = [

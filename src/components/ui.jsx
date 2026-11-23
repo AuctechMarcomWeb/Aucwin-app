@@ -170,6 +170,8 @@ const TONES = {
   whatsapp: "#16A34A",
   followup: "#DB2777",
   task: "#7C3AED",
+  not_interested: "#DC2626",
+  hanged_up: "#E11D48",
 };
 export const toneOf = (v) => TONES[v] ?? "#64748B";
 /** Soft coloured pill: dot + label. */

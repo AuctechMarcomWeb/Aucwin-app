@@ -23,6 +23,9 @@ import LeadDetailScreen from "@/screens/LeadDetailScreen";
 import { ClientsScreen, ClientDetailScreen } from "@/screens/ClientsScreen";
 import TasksScreen from "@/screens/TasksScreen";
 import MoreScreen from "@/screens/MoreScreen";
+import DataSourcesScreen from "@/screens/DataSourcesScreen";
+import ReportsScreen from "@/screens/ReportsScreen";
+import StagesScreen from "@/screens/StagesScreen";
 import HomeScreen from "@/screens/HomeScreen";
 import CalendarScreen from "@/screens/CalendarScreen";
 import {
@@ -100,6 +103,21 @@ function MoreNav() {
         name="Overview"
         component={DashboardScreen}
         options={{ headerShown: false }}
+      />
+      <MoreStack.Screen
+        name="DataSources"
+        component={DataSourcesScreen}
+        options={{ title: "Data Sources" }}
+      />
+      <MoreStack.Screen
+        name="Reports"
+        component={ReportsScreen}
+        options={{ title: "Reports" }}
+      />
+      <MoreStack.Screen
+        name="Stages"
+        component={StagesScreen}
+        options={{ title: "Lead Stages" }}
       />
     </MoreStack.Navigator>
   );

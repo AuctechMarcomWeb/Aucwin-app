@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { getLeads } from "@/lib/api";
 import { errMsg } from "@/lib/http";
 import { LEAD_STATUSES, label } from "@/lib/types";
+import { useStages } from "@/lib/stages";
 import {
   Avatar,
   Badge,
@@ -26,6 +27,31 @@ import { OfflineBanner } from "@/components/OfflineBanner";
 
 const PAGE = 25;
 
+function StageBadge({ status }) {
+  const { labelOf, colorOf } = useStages();
+  const c = colorOf(status);
+  return (
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 5,
+        backgroundColor: c + "1A",
+        borderRadius: 999,
+        paddingHorizontal: 9,
+        paddingVertical: 3,
+      }}
+    >
+      <View
+        style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c }}
+      />
+      <Text style={{ fontSize: 11.5, fontWeight: "700", color: c }}>
+        {labelOf(status)}
+      </Text>
+    </View>
+  );
+}
+
 export default function LeadsScreen() {
   const nav = useNavigation();
   const route = useRoute();
@@ -33,6 +59,7 @@ export default function LeadsScreen() {
   const [status, setStatus] = useState(route.params?.status ?? "");
   const [open, setOpen] = useState(false);
   const term = useDebounced(search.trim());
+  const { stages } = useStages();
   // opening Leads again from Home / Overview with a status filter updates the filter
   useEffect(() => {
     if (route.params?.status !== undefined) setStatus(route.params.status);
@@ -92,7 +119,7 @@ export default function LeadsScreen() {
           value={status}
           allowEmpty
           onChange={(v) => setStatus(v)}
-          options={enumOptions(LEAD_STATUSES)}
+          options={stages.map((st) => ({ value: st.key, label: st.label }))}
         />
       </View>
       {q.isLoading ? (
@@ -187,7 +214,7 @@ const LeadRow = memo(function LeadRow({ lead, onPress }) {
           </Text>
         </View>
         <View style={{ alignItems: "flex-end", gap: 4 }}>
-          <Badge value={lead.status} />
+          <StageBadge status={lead.status} />
           <Text style={{ fontSize: 11, color: C.faint }}>
             {lead.estimated_value
               ? money(lead.estimated_value)
