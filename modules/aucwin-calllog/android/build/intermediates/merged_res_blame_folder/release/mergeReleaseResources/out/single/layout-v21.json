@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-release-29:/layout-v21/notification_template_custom_big.xml",
+        "source": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-core-1.17.0-22:/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-release-29:/layout-v21/notification_action_tombstone.xml",
+        "source": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-core-1.17.0-22:/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-release-29:/layout-v21/notification_template_icon_group.xml",
+        "source": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-core-1.17.0-22:/layout-v21/notification_template_icon_group.xml"
+    },
+    {
+        "merged": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-release-29:/layout-v21/notification_action.xml",
+        "source": "com.auctechmarcom.aucwin.calllog.aucwin-calllog-core-1.17.0-22:/layout-v21/notification_action.xml"
+    }
+]

@@ -1,0 +1,44 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:1:1-19:12
+INJECTED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:1:1-19:12
+	package
+		INJECTED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml
+	xmlns:android
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:1:11-69
+uses-permission#android.permission.READ_CALL_LOG
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:3:3-70
+	android:name
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:3:20-67
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:4:3-73
+	android:name
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:4:20-70
+uses-permission#android.permission.INTERNET
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:5:3-65
+	android:name
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:5:20-62
+application
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:7:3-18:17
+receiver#com.auctechmarcom.aucwin.calllog.CallEndReceiver
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:10:5-17:16
+	android:enabled
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:12:7-29
+	android:exported
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:13:7-30
+	android:name
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:11:7-70
+intent-filter#action:name:android.intent.action.PHONE_STATE
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:14:7-16:23
+action#android.intent.action.PHONE_STATE
+ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:15:9-68
+	android:name
+		ADDED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:15:17-65
+uses-sdk
+INJECTED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml
+INJECTED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml
+	android:targetSdkVersion
+		INJECTED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml
+	android:minSdkVersion
+		INJECTED from C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml

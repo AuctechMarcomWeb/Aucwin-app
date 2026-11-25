@@ -78,7 +78,7 @@ export default function DataSourcesScreen() {
       style={{ flex: 1, backgroundColor: C.bg }}
       contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 24 }}
       refreshControl={
-        <RefreshControl refreshing={q.isFetching} onRefresh={q.refetch} />
+        <RefreshControl refreshing={false} onRefresh={q.refetch} />
       }
     >
       {/* total */}

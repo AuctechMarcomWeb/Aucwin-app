@@ -8,6 +8,7 @@ import {
   createFollowUp,
   createLead,
   createTask,
+  getMasters,
   getProfiles,
   updateFollowUp,
   updateLead,
@@ -142,6 +143,12 @@ export function AssigneeChips({ value, onChange }) {
 export function LeadForm({ lead, onDone }) {
   const qc = useQueryClient();
   const { stages } = useStages();
+  // Lead sources come from admin-managed Masters (falls back to the built-in
+  // list until loaded; keeps an existing value even if later removed).
+  const sourcesQ = useQuery({
+    queryKey: ["masters", "lead_source"],
+    queryFn: () => getMasters("lead_source"),
+  });
   const [f, setF] = useState({
     name: lead?.name ?? "",
     phone: lead?.phone ?? "",
@@ -225,7 +232,16 @@ export function LeadForm({ lead, onDone }) {
         <Chips
           value={f.source ?? "other"}
           onChange={(v) => set("source", v)}
-          options={enumOptions(LEAD_SOURCES)}
+          options={(() => {
+            const list = (sourcesQ.data ?? []).map((sItem) => ({
+              value: sItem.key,
+              label: sItem.label,
+            }));
+            if (!list.length) return enumOptions(LEAD_SOURCES);
+            if (f.source && !list.some((o) => o.value === f.source))
+              list.unshift({ value: f.source, label: f.source });
+            return list;
+          })()}
         />
       </Field>
       <Field label="Status">
@@ -263,6 +279,11 @@ export function FollowUpForm({
   onDone,
 }) {
   const qc = useQueryClient();
+  // Follow-up types come from admin-managed Masters (defaults keep working).
+  const typesQ = useQuery({
+    queryKey: ["masters", "followup_type"],
+    queryFn: () => getMasters("followup_type"),
+  });
   const [title, setTitle] = useState(followUp?.title ?? "");
   const [type, setType] = useState(followUp?.type ?? fixedType ?? "call");
   const [ends, setEnds] = useState(
@@ -322,7 +343,16 @@ export function FollowUpForm({
           <Chips
             value={type}
             onChange={(v) => v && setType(v)}
-            options={enumOptions(FOLLOWUP_TYPES)}
+            options={(() => {
+              const list = (typesQ.data ?? []).map((t) => ({
+                value: t.key,
+                label: t.label,
+              }));
+              if (!list.length) return enumOptions(FOLLOWUP_TYPES);
+              if (type && !list.some((o) => o.value === type))
+                list.unshift({ value: type, label: type });
+              return list;
+            })()}
           />
         </Field>
       )}

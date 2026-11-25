@@ -100,7 +100,7 @@ export default function HomeScreen() {
         contentContainerStyle={{ paddingBottom: 32 }}
         refreshControl={
           <RefreshControl
-            refreshing={counts.isFetching && !counts.isLoading}
+            refreshing={false}
             onRefresh={() => { counts.refetch(); today.refetch(); }}
             progressViewOffset={insets.top}
           />

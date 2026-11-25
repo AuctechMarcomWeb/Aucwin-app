@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, AppState, Text, View } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -11,6 +11,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Ionicons } from "@expo/vector-icons";
 import { onNotificationTap } from "@/lib/notifications";
+import { reconcilePendingCall } from "@/lib/callTracking";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { QueryProvider, RealtimeSync } from "@/lib/query";
 import { C } from "@/components/ui";
@@ -25,6 +26,7 @@ import TasksScreen from "@/screens/TasksScreen";
 import MoreScreen from "@/screens/MoreScreen";
 import DataSourcesScreen from "@/screens/DataSourcesScreen";
 import ReportsScreen from "@/screens/ReportsScreen";
+import MyCallsScreen from "@/screens/MyCallsScreen";
 import StagesScreen from "@/screens/StagesScreen";
 import HomeScreen from "@/screens/HomeScreen";
 import CalendarScreen from "@/screens/CalendarScreen";
@@ -108,6 +110,11 @@ function MoreNav() {
         name="DataSources"
         component={DataSourcesScreen}
         options={{ title: "Data Sources" }}
+      />
+      <MoreStack.Screen
+        name="MyCalls"
+        component={MyCallsScreen}
+        options={{ title: "My Calls" }}
       />
       <MoreStack.Screen
         name="Reports"
@@ -300,6 +307,17 @@ function Root() {
       if (data?.followup_id) navRef.current?.navigate("Calendar");
     });
   }, []);
+
+  // Catch up on any call that finished while the app was backgrounded or closed
+  // (the background receiver normally records it live; this is the safety net).
+  useEffect(() => {
+    if (!session) return;
+    reconcilePendingCall();
+    const sub = AppState.addEventListener("change", (s) => {
+      if (s === "active") reconcilePendingCall();
+    });
+    return () => sub.remove();
+  }, [session]);
 
   if (loading)
     return (

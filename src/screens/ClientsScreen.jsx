@@ -19,9 +19,20 @@ import {
 } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { telUri, smsUri, waUri } from "@/lib/phone";
+import {
+  armCall,
+  ensureCallLogPermission,
+  ensurePhoneStatePermission,
+} from "@/lib/callTracking";
 import { StatusBar } from "expo-status-bar";
 import { Ionicons } from "@expo/vector-icons";
-import { getClient, getClients, getPayments, updateClient } from "@/lib/api";
+import {
+  getClient,
+  getClients,
+  getPayments,
+  logClientCall,
+  updateClient,
+} from "@/lib/api";
 import { errMsg } from "@/lib/http";
 import { SERVICE_STATUSES } from "@/lib/types";
 import {
@@ -104,7 +115,7 @@ export function ClientsScreen() {
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           contentContainerStyle={{ padding: 12, paddingBottom: 40 }}
-          refreshing={q.isRefetching}
+          refreshing={false}
           onRefresh={() => q.refetch()}
           ListEmptyComponent={
             <Empty
@@ -320,6 +331,21 @@ export function ClientDetailScreen() {
     },
     onError: (e) => Alert.alert("Error", errMsg(e)),
   });
+  // Outbound call tracking for customers — same as leads. Android arms the native
+  // recorder (outcome + talk time recorded in the background); iOS just logs the
+  // attempt. kind "client" routes it to the customer's record.
+  const startCall = (phone) => {
+    if (Platform.OS === "android") {
+      (async () => {
+        await ensureCallLogPermission();
+        await ensurePhoneStatePermission();
+        await armCall(id, phone, "client");
+      })().catch(() => {});
+    } else {
+      logClientCall(id).catch(() => {});
+    }
+    openUrl(telUri(phone));
+  };
   if (q.isLoading || q.error || !q.data)
     return (
       <View style={s.screen}>
@@ -381,7 +407,7 @@ export function ClientDetailScreen() {
         contentContainerStyle={{ paddingBottom: 48 }}
         refreshControl={
           <RefreshControl
-            refreshing={q.isRefetching}
+            refreshing={false}
             onRefresh={() => {
               q.refetch();
               pays.refetch();
@@ -510,7 +536,7 @@ export function ClientDetailScreen() {
                   icon="call"
                   label="Call"
                   color="#5EEAD4"
-                  onPress={() => openUrl(telUri(c.phone))}
+                  onPress={() => startCall(c.phone)}
                 />
               )}
               {digits && (
@@ -655,7 +681,7 @@ export function ClientDetailScreen() {
                 icon="call-outline"
                 label="Phone"
                 value={c.phone}
-                onPress={() => openUrl(telUri(c.phone))}
+                onPress={() => startCall(c.phone)}
               />
             )}
             {c.email && (

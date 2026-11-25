@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   ActivityIndicator,
   Alert,
+  AppState,
   Linking,
   Platform,
   Pressable,
@@ -11,6 +12,11 @@ import {
   View,
 } from "react-native";
 import { telUri, smsUri, waUri } from "@/lib/phone";
+import {
+  armCall,
+  ensureCallLogPermission,
+  ensurePhoneStatePermission,
+} from "@/lib/callTracking";
 import { StatusBar } from "expo-status-bar";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -162,6 +168,39 @@ export default function LeadDetailScreen() {
   const qc = useQueryClient();
   const { isAdmin } = useAuth();
   const q = useQuery({ queryKey: ["lead", id], queryFn: () => getLead(id) });
+
+  // --- Outbound call tracking ---------------------------------------------
+  // iPhone: we can only record that a call was placed (no outcome possible).
+  // Android: we "arm" the native recorder with the lead + number. The native
+  // background receiver reads the call log the moment the call ends and posts
+  // the outcome + talk time on its own — the agent never has to return to the
+  // app. (A reconcile on app open — in App.jsx — covers the rare case where the
+  // app was force-stopped and the receiver couldn't run.)
+  const refreshTimeline = () =>
+    qc.invalidateQueries({ queryKey: ["activities", { lead_id: id }] });
+  const startCall = (phone) => {
+    if (Platform.OS === "android") {
+      (async () => {
+        await ensureCallLogPermission();
+        await ensurePhoneStatePermission();
+        await armCall(id, phone, "lead");
+      })().catch(() => {});
+    } else {
+      // iOS / anything else: log the attempt now (no outcome available)
+      logCall(id).then(refreshTimeline).catch(() => {});
+    }
+    openUrl(telUri(phone));
+  };
+  // When we come back to this lead, refresh its timeline so a just-recorded
+  // call shows up.
+  useEffect(() => {
+    if (Platform.OS !== "android") return;
+    const sub = AppState.addEventListener("change", (state) => {
+      if (state === "active") setTimeout(refreshTimeline, 2500);
+    });
+    return () => sub.remove();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
   const [edit, setEdit] = useState(false);
   const [convert, setConvert] = useState(false);
   const [service, setService] = useState("");
@@ -314,7 +353,7 @@ export default function LeadDetailScreen() {
         contentContainerStyle={{ paddingBottom: 48 }}
         refreshControl={
           <RefreshControl
-            refreshing={q.isRefetching}
+            refreshing={false}
             onRefresh={() => q.refetch()}
             progressViewOffset={insets.top}
           />
@@ -493,18 +532,7 @@ export default function LeadDetailScreen() {
                   icon="call"
                   text="Call"
                   color="#5EEAD4"
-                  onPress={() => {
-                    // record the outbound call for the agent-outreach report,
-                    // then open the dialer (logging never blocks the call)
-                    logCall(id)
-                      .then(() =>
-                        qc.invalidateQueries({
-                          queryKey: ["activities", { lead_id: id }],
-                        }),
-                      )
-                      .catch(() => {});
-                    openUrl(telUri(l.phone));
-                  }}
+                  onPress={() => startCall(l.phone)}
                 />
               )}
               {digits && (
