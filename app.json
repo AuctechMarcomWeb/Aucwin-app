@@ -3,7 +3,7 @@
   "expo": {
     "name": "AucWin",
     "slug": "harbour-crm",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "nexuscrm",
@@ -20,7 +20,7 @@
     },
     "android": {
       "package": "com.auctechmarcom.aucwin",
-      "versionCode": 5,
+      "versionCode": 6,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0F2F58"
