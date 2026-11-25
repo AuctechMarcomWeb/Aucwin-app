@@ -1,0 +1,9 @@
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-pngs-0 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\build\generated\res\pngs\release
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-updated_navigation_xml-1 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\build\generated\updated_navigation_xml\release
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-mergeReleaseResources-2 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\build\intermediates\incremental\release\mergeReleaseResources\merged.dir
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-mergeReleaseResources-3 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\build\intermediates\incremental\release\mergeReleaseResources\stripped.dir
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-release-4 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\build\intermediates\merged_res\release\mergeReleaseResources
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-release-5 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\build\intermediates\packaged_res\release\packageReleaseResources
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-main-6 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\res
+com.auctechmarcom.aucwin.calllog.aucwin-calllog-release-7 C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\release\res
+gradleHome-0 C:\Users\Syed\.gradle

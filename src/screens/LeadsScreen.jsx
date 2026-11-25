@@ -133,7 +133,7 @@ export default function LeadsScreen() {
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           contentContainerStyle={{ padding: 12, paddingBottom: 90 }}
-          refreshing={q.isRefetching && !q.isFetchingNextPage}
+          refreshing={false}
           onRefresh={() => q.refetch()}
           onEndReached={() =>
             q.hasNextPage && !q.isFetchingNextPage && q.fetchNextPage()

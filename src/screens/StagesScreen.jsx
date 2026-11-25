@@ -152,7 +152,7 @@ export default function StagesScreen() {
           paddingBottom: insets.bottom + 90,
         }}
         refreshControl={
-          <RefreshControl refreshing={q.isFetching} onRefresh={q.refetch} />
+          <RefreshControl refreshing={false} onRefresh={q.refetch} />
         }
       >
         {stages.map((s, i) => (

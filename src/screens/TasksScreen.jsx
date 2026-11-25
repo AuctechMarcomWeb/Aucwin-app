@@ -87,7 +87,7 @@ export default function TasksScreen() {
           data={q.data ?? []}
           keyExtractor={(t) => t.id}
           contentContainerStyle={{ padding: 12, paddingBottom: 90 }}
-          refreshing={q.isRefetching}
+          refreshing={false}
           onRefresh={() => q.refetch()}
           ListEmptyComponent={
             <Empty title="No tasks" hint="Tap + to create one." />

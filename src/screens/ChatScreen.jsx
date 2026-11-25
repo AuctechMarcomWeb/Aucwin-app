@@ -492,7 +492,7 @@ export function ChannelsScreen() {
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="on-drag"
           contentContainerStyle={{ padding: 14, paddingBottom: 100 }}
-          refreshing={q.isRefetching}
+          refreshing={false}
           onRefresh={() => {
             q.refetch();
             people.refetch();

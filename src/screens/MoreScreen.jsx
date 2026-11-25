@@ -332,7 +332,7 @@ export default function MoreScreen() {
           {/* ================= modules ================= */}
           <GroupTitle>All modules</GroupTitle>
           <Group>
-            {modules.map((m, i) => (
+            {modules.map((m) => (
               <Row
                 key={m.key}
                 icon={m.icon}
@@ -340,9 +340,18 @@ export default function MoreScreen() {
                 iconBg={m.bg}
                 title={m.label}
                 onPress={() => open(m)}
-                last={!isAdmin && i === modules.length - 1}
               />
             ))}
+            {/* Everyone — including agents — can see their own call log. */}
+            <Row
+              icon="call"
+              iconColor="#0D9488"
+              iconBg="#CCFBF1"
+              title="My calls"
+              sub="Your outbound calls — answered, missed and talk time"
+              onPress={() => nav.navigate("MyCalls")}
+              last={!isAdmin}
+            />
             {isAdmin && (
               <>
                 <Row

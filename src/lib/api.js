@@ -10,8 +10,16 @@ export const getEmployeePerformance = () =>
 export const getDataSources = () => http.get("/api/data-sources");
 export const getAgentOutreachReport = (from, to) =>
   http.get("/api/reports/agent-outreach", { from, to });
+/** Paginated, filterable call log. params: { from, to, page, pageSize, agent, type, outcome, q } */
+export const getTeamCalls = (params = {}) =>
+  http.get("/api/reports/calls", params);
+/** The signed-in user's OWN calls. params: { from, to, page, pageSize, type, outcome, q } */
+export const getMyCalls = (params = {}) =>
+  http.get("/api/reports/my-calls", params);
 export const getLeadStages = () => http.get("/api/lead-stages");
 export const createLeadStage = (input) => http.post("/api/lead-stages", input);
+// Admin-managed lists (lead sources, follow-up types, designations)
+export const getMasters = (type) => http.get("/api/masters", { type });
 export const updateLeadStage = (id, patch) =>
   http.patch(`/api/lead-stages/${id}`, patch);
 export const reorderLeadStages = (order) =>
@@ -35,7 +43,11 @@ export const getLead = (id) => http.get(`/api/leads/${id}`);
 export const createLead = (input) => http.post("/api/leads", input);
 export const updateLead = (id, patch) => http.patch(`/api/leads/${id}`, patch);
 export const deleteLead = (id) => http.del(`/api/leads/${id}`);
-export const logCall = (id) => http.post(`/api/leads/${id}/log-call`);
+// body (optional): { outcome: "answered"|"not_answered", duration_seconds }
+export const logCall = (id, body) =>
+  http.post(`/api/leads/${id}/log-call`, body || {});
+export const logClientCall = (id, body) =>
+  http.post(`/api/clients/${id}/log-call`, body || {});
 export const importLeads = async (rows) =>
   (await http.post("/api/leads/import", { rows })).count;
 export const exportLeads = () => http.get("/api/leads/export");

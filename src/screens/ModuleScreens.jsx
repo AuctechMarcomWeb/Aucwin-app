@@ -144,7 +144,7 @@ function Scheduled({ type, moduleKey }) {
           keyExtractor={(f) => f.id}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ padding: 12, paddingBottom: 90 }}
-          refreshing={q.isRefetching}
+          refreshing={false}
           onRefresh={() => q.refetch()}
           ListEmptyComponent={
             <Empty
@@ -341,7 +341,7 @@ export function TodoScreen() {
           keyExtractor={(t) => t.id}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={{ padding: 12, paddingBottom: 40 }}
-          refreshing={q.isRefetching}
+          refreshing={false}
           onRefresh={() => q.refetch()}
           ListHeaderComponent={
             rows.length ? (
@@ -445,7 +445,7 @@ export function NotesScreen() {
           keyboardShouldPersistTaps="handled"
           columnWrapperStyle={{ gap: 10 }}
           contentContainerStyle={{ padding: 12, paddingBottom: 90, gap: 10 }}
-          refreshing={q.isRefetching}
+          refreshing={false}
           onRefresh={() => q.refetch()}
           ListEmptyComponent={<Empty title="No notes yet" />}
           renderItem={({ item: n }) => {

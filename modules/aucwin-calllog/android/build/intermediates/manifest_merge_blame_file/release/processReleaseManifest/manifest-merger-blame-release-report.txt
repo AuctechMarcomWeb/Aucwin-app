@@ -1,0 +1,43 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.auctechmarcom.aucwin.calllog" >
+4
+5    <uses-sdk android:minSdkVersion="24" />
+5-->INJECTED
+5-->INJECTED
+6
+7    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+7-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:3:3-70
+7-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:3:20-67
+8    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+8-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:4:3-73
+8-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:4:20-70
+9    <uses-permission android:name="android.permission.INTERNET" />
+9-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:5:3-65
+9-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:5:20-62
+10
+11    <application>
+11-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:7:3-18:17
+12
+13        <!--
+14         Fires when any phone call ends, even if AucWin is in the background,
+15         so the call outcome is recorded without the agent reopening the app.
+16        -->
+17        <receiver
+17-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:10:5-17:16
+18            android:name="com.auctechmarcom.aucwin.calllog.CallEndReceiver"
+18-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:11:7-70
+19            android:enabled="true"
+19-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:12:7-29
+20            android:exported="true" >
+20-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:13:7-30
+21            <intent-filter>
+21-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:14:7-16:23
+22                <action android:name="android.intent.action.PHONE_STATE" />
+22-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:15:9-68
+22-->C:\hb\aucwin-appNEW\Aucwin-app\modules\aucwin-calllog\android\src\main\AndroidManifest.xml:15:17-65
+23            </intent-filter>
+24        </receiver>
+25    </application>
+26
+27</manifest>
